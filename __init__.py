@@ -39,5 +39,7 @@ def rdp(df, xcol, ycol, epsilon=0.001):
             [result_0, result_1]
         )  # result_0 and result_1 are dataframes.
     else:
-        result = df
+        result = pd.DataFrame(
+            np.concatenate([[np_data[0]], [np_data[-1]]]), columns=df.columns
+        )
     return result
