@@ -20,7 +20,7 @@ def rdp(df, xcol, ycol, epsilon=0.001):
     d_max = 0
 
     start = np.array([np_data[0, col_0], np_data[0, col_1]])
-    end = np.array([np_data[0, col_0], np_data[0, col_1]])
+    end = np.array([np_data[-1, col_0], np_data[-1, col_1]])
 
     for i, row in enumerate(np_data):
         d = get_distance(start, end, np.array([row[col_0], row[col_1]]))
