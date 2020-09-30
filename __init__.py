@@ -8,8 +8,11 @@ from math import sqrt
 
 
 def get_distance(start, end, p):
-    d = np.linalg.norm(np.cross(end - start, start - p)) / np.linalg.norm(end - start)
-    return d
+    x_diff = end[0] - start[0]
+    y_diff = end[1] - start[1]
+    return abs(
+        y_diff * p[0] - x_diff * p[1] + end[0] * start[1] - end[1] * start[0]
+    ) / sqrt(y_diff ** 2 + x_diff ** 2)
 
 
 def rdp(df, xcol, ycol, epsilon=0.001):
