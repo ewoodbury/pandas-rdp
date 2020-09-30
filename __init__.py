@@ -35,9 +35,7 @@ def rdp(df, xcol, ycol, epsilon=0.001):
         result_1 = rdp(
             pd.DataFrame(np_data[index:], columns=df.columns), xcol, ycol, epsilon
         )
-        result = pd.concat(
-            [result_0, result_1]
-        )  # result_0 and result_1 are dataframes.
+        result = pd.concat([result_0, result_1])
     else:
         result = pd.DataFrame(
             np.concatenate([[np_data[0]], [np_data[-1]]]), columns=df.columns
