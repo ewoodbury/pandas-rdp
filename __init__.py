@@ -42,4 +42,4 @@ def rdp(df, xcol, ycol, epsilon=0.001):
         result = pd.DataFrame(
             np.concatenate([[np_data[0]], [np_data[-1]]]), columns=df.columns
         )
-    return result
+    return result.drop_duplicates(ignore_index=True)
