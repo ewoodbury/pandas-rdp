@@ -15,13 +15,9 @@ def get_distance(start, end, p):
     ) / sqrt(y_diff ** 2 + x_diff ** 2)
 
 
-def rdp(df, xcol, ycol, epsilon=0.001):
-    col_0 = df.columns.get_loc(xcol)
-    col_1 = df.columns.get_loc(ycol)
-    np_data = df.to_numpy()
+def rdp_reduce(np_data, col_0, col_1, epsilon=0.001):
     index = 0
     d_max = 0
-
     start = np.array([np_data[0, col_0], np_data[0, col_1]])
     end = np.array([np_data[-1, col_0], np_data[-1, col_1]])
 
@@ -32,15 +28,23 @@ def rdp(df, xcol, ycol, epsilon=0.001):
             d_max = d
 
     if d_max > epsilon:
-        result_0 = rdp(
-            pd.DataFrame(np_data[: index + 1], columns=df.columns), xcol, ycol, epsilon
-        )
-        result_1 = rdp(
-            pd.DataFrame(np_data[index:], columns=df.columns), xcol, ycol, epsilon
-        )
-        result = pd.concat([result_0, result_1])
+        result_0 = rdp_reduce(np_data[: index + 1], col_0, col_1, epsilon)
+        result_1 = rdp_reduce(np_data[index:], col_0, col_1, epsilon)
+        result = np.concatenate([result_0, result_1])
     else:
-        result = pd.DataFrame(
-            np.concatenate([[np_data[0]], [np_data[-1]]]), columns=df.columns
+        result = np.concatenate([[np_data[0]], [np_data[-1]]])
+    return result
+
+
+def rdp(df, xcol, ycol, epsilon=0.001):
+    if isinstance(df, pd.DataFrame):
+        col_0 = df.columns.get_loc(xcol)
+        col_1 = df.columns.get_loc(ycol)
+        np_data = df.to_numpy()
+        result = rdp_reduce(np_data, col_0, col_1, epsilon=0.001)
+        return pd.DataFrame(result, columns=df.columns).drop_duplicates(
+            ignore_index=True
         )
-    return result.drop_duplicates(ignore_index=True)
+    else:
+        print("Not a dataframe")
+        return
