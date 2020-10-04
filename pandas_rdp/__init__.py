@@ -47,7 +47,7 @@ def rdp(data, xcol, ycol, epsilon=0.001):
         )
     elif isinstance(data, np.ndarray):
         result = rdp_reduce(data, xcol, ycol, epsilon=0.001)
-        return result.unique()
+        return pd.DataFrame(result).drop_duplicates(ignore_index=True).to_numpy()
     else:
         print("Not a dataframe or array")
         return
