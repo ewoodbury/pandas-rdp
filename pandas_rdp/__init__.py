@@ -36,15 +36,18 @@ def rdp_reduce(np_data, xcol_ind, ycol_ind, epsilon=0.001):
     return result
 
 
-def rdp(df, xcol, ycol, epsilon=0.001):
-    if isinstance(df, pd.DataFrame):
-        xcol_ind = df.columns.get_loc(xcol)
-        ycol_ind = df.columns.get_loc(ycol)
-        np_data = df.to_numpy()
+def rdp(data, xcol, ycol, epsilon=0.001):
+    if isinstance(data, pd.DataFrame):
+        xcol_ind = data.columns.get_loc(xcol)
+        ycol_ind = data.columns.get_loc(ycol)
+        np_data = data.to_numpy()
         result = rdp_reduce(np_data, xcol_ind, ycol_ind, epsilon=0.001)
-        return pd.DataFrame(result, columns=df.columns).drop_duplicates(
+        return pd.DataFrame(result, columns=data.columns).drop_duplicates(
             ignore_index=True
         )
+    elif isinstance(data, np.ndarray):
+        result = rdp_reduce(data, xcol, ycol, epsilon=0.001)
+        return result.unique()
     else:
-        print("Not a dataframe")
+        print("Not a dataframe or array")
         return
