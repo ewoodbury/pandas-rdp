@@ -41,12 +41,15 @@ def rdp(data, xcol, ycol, epsilon=0.001):
         xcol_ind = data.columns.get_loc(xcol)
         ycol_ind = data.columns.get_loc(ycol)
         np_data = data.to_numpy()
-        result = rdp_reduce(np_data, xcol_ind, ycol_ind, epsilon=0.001)
+        result = rdp_reduce(np_data, xcol_ind, ycol_ind, epsilon)
         return pd.DataFrame(result, columns=data.columns).drop_duplicates(
             ignore_index=True
         )
     elif isinstance(data, np.ndarray):
-        result = rdp_reduce(data, xcol, ycol, epsilon=0.001)
+        result = rdp_reduce(data, xcol, ycol, epsilon)
+        return pd.DataFrame(result).drop_duplicates(ignore_index=True).to_numpy()
+    elif isinstance(data, list):
+        result = rdp_reduce(np.asarray(data), xcol, ycol, epsilon)
         return pd.DataFrame(result).drop_duplicates(ignore_index=True).to_numpy()
     else:
         print("Not a dataframe or array")
