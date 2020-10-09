@@ -38,6 +38,10 @@ def rdp_reduce(np_data, xcol_ind, ycol_ind, epsilon=0.001):
 
 def rdp(data, xcol, ycol, epsilon=0.001):
     if isinstance(data, pd.DataFrame):
+        if (xcol not in data.columns) & ~isinstance(xcol, int):
+            raise Exception(f"{xcol} is not a data column or integer index.")
+        if (ycol not in data.columns) & ~isinstance(ycol, int):
+            raise Exception(f"{ycol} is not a data column or integer index.")
         xcol_ind = data.columns.get_loc(xcol)
         ycol_ind = data.columns.get_loc(ycol)
         np_data = data.to_numpy()
@@ -46,9 +50,18 @@ def rdp(data, xcol, ycol, epsilon=0.001):
             ignore_index=True
         )
     elif isinstance(data, np.ndarray):
+        # Add error handling for xcol and ycol inputs.
+        if ~isinstance(xcol, int):
+            raise Exception(f"{xcol} is not an integer index for the input array.")
+        if ~isinstance(ycol, int):
+            raise Exception(f"{ycol} is not an integer index for the input array.")
         result = rdp_reduce(data, xcol, ycol, epsilon)
         return pd.DataFrame(result).drop_duplicates(ignore_index=True).to_numpy()
     elif isinstance(data, list):
+        if ~isinstance(xcol, int):
+            raise Exception(f"{xcol} is not an integer index for the input array.")
+        if ~isinstance(ycol, int):
+            raise Exception(f"{ycol} is not an integer index for the input array.")
         result = rdp_reduce(np.asarray(data), xcol, ycol, epsilon)
         return pd.DataFrame(result).drop_duplicates(ignore_index=True).to_numpy()
     else:
